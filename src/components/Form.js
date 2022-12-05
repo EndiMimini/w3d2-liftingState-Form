@@ -7,27 +7,26 @@ const Form = (props) => {
     const [name, setName] = useState("");
     const [favStack, setFavStack] = useState("");
     const [smart, setSmart] = useState(false)
-    const [error, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState("");
 
 
     const submitHandler = (e) => {
         e.preventDefault();
         
-        if (name.length >0 && name.length <3){
-            setError(true)
-            setErrorMessage('Please complete everything!')
+        if (name.length <3 || favStack === ''){
+            setErrorMessage('Your form has some unsolved issues!')
         }
-        if (!error){
+        else {
             setStudentList([...studentList, 
                 {
                     name: name,
                     favStack: favStack,
-                    smart: smart
+                    smart: smart,
+                    id: Math.floor(Math.random()*10000).toString()
             }])
             setName("");
             setFavStack("");
-            setSmart(false);
+            setErrorMessage("");
         }
         
     }
@@ -35,6 +34,11 @@ const Form = (props) => {
     return(
         <div className="form">
             <h1>Create a student</h1>
+            {
+                errorMessage?
+                <p>{errorMessage}</p>:
+                null
+            }
             <form onSubmit={(e)=>submitHandler(e)}>
                 <div>
                     <label>Name: </label>
@@ -58,10 +62,8 @@ const Form = (props) => {
                     <label>Is the student smart? </label>
                     <input type="checkbox" checked={smart} onChange={(e)=>setSmart(!smart)}/>
                 </div>
-                { error?
-                <button>Create the student</button>:
-                <button disabled>Create the student</button>   
-                }
+                <button>Create the student</button>
+                
             </form>
 
             
